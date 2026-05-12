@@ -1,0 +1,18 @@
+# Core (already in requirements.txt)
+ultralytics>=8.2.0
+opencv-python>=4.9.0
+numpy>=1.26.0
+torch>=2.1.0
+torchvision>=0.16.0
+
+# Fine-tuning extras
+roboflow>=1.1.0          # Dataset download from Roboflow Universe
+pyyaml>=6.0              # data.yaml parsing
+scikit-learn>=1.4.0      # Metrics utilities
+matplotlib>=3.8.0        # Training curve plots
+seaborn>=0.13.0          # Confusion matrix visualization
+tensorboard>=2.15.0      # Training monitoring (optional)
+tqdm>=4.66.0
+
+# Hyperparameter tuning (optional)
+# ray[tune]>=2.9.0       # Uncomment for tune_hyperparams.py

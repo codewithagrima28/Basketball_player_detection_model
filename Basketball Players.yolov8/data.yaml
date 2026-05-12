@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 9
+names: ['Ball', 'Hoop', 'Period', 'Player', 'Ref', 'Shot Clock', 'Team Name', 'Team Points', 'Time Remaining']
+
+roboflow:
+  workspace: agrimas-workspace
+  project: agrimas-workspace
+  version: dataset
+  license: Private
+  url: https://app.roboflow.com/agrimas-workspace/agrimas-workspace/dataset
