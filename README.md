@@ -1,147 +1,188 @@
-# 🏀 Basketball Player Detector
+# Basketball Player Detection & Performance Analytics
 
-A real-time basketball detection system powered by **YOLOv8** that detects players, tracks them across frames, classifies them by team using jersey colors, and detects the ball — all in one pipeline.
+I built this because I was curious whether YOLOv8 could do more than just draw boxes around players. Turns out it can — this project detects players and the ball, figures out which team each player is on just from their jersey color, tracks every player across the entire video with a consistent ID, and at the end spits out a dashboard with distance covered, speed, and heatmaps showing where each player spent their time on the court.
 
----
-
-## ✨ Features
-
-| Feature | Description |
-|---|---|
-| 🧍 Player Detection | Bounding boxes on every player using YOLOv8 |
-| 🏀 Ball Detection | Detects the basketball (COCO class 32) |
-| 🎽 Team Classification | Auto-classifies players by jersey color (K-Means clustering) |
-| 🔢 Player Tracking | Consistent IDs across frames using IoU tracking |
-| 🖼️ Image Support | Run on single images |
-| 🎬 Video Support | Process full video files |
-| 📷 Webcam Support | Real-time live detection |
+The goal was to take something that coaches usually spend 3-4 hours doing manually (rewatching footage, logging stats) and get it down to a few minutes.
 
 ---
 
-## 🗂️ Project Structure
+## What it does
+
+- Detects players and the basketball in any video or image
+- Draws bounding boxes with team colors and player IDs that stay consistent frame to frame
+- Automatically figures out which player belongs to which team by looking at jersey colors — no manual setup needed
+- Tracks how far each player ran and how fast they were going
+- Maps out which areas of the court each player used most
+- Generates a heatmap per player and per team
+- Puts everything into a `dashboard.html` you can open in your browser — charts, stats table, heatmaps, all in one place
+- Exports a CSV with the full per-player stats table (built with Pandas)
+
+Works on images, video files, and live webcam.
+
+---
+
+## Project structure
 
 ```
-basketball-detector/
-├── src/
-│   ├── detector.py          # Main detection pipeline
-│   ├── team_classifier.py   # Jersey color → team assignment
-│   ├── tracker.py           # IoU-based multi-object tracker
-│   └── utils.py             # Drawing, video I/O helpers
-├── output/
-│   ├── images/              # Detected image outputs
-│   └── videos/              # Detected video outputs
-├── notebooks/
-│   └── demo.ipynb           # Jupyter demo notebook
+Basketball_player_Detection/
+│
+├── detector.py          # entry point — runs the full pipeline
+├── analytics.py         # distance, speed, zone tracking per player
+├── heatmap.py           # generates court heatmap images
+├── dashboard.py         # builds the HTML report
+├── team_classifier.py   # jersey color → team (K-Means on HSV)
+├── tracker.py           # keeps player IDs consistent across frames
+├── utils.py             # drawing boxes, saving video, overlays
+│
+├── finetune/
+│   ├── train.py             # fine-tune on your own basketball dataset
+│   ├── download_dataset.py  # pulls dataset from Roboflow
+│   ├── evaluate.py          # check mAP, precision, recall after training
+│   └── tune_hyperparams.py  # automated hyperparameter search
+│
 ├── tests/
-│   └── test_tracker.py      # Unit tests
+│   └── test_tracker.py
+│
+├── output/              # everything gets saved here
+│   ├── detected_game.mp4
+│   ├── match_stats.csv
+│   ├── dashboard.html
+│   └── heatmaps/
+│
 ├── requirements.txt
-└── README.md
+├── FINE_TUNING.md
+└── Basketball_Finetune_Colab.ipynb
 ```
 
 ---
 
-## ⚙️ Installation
+## Setup
 
-### 1. Clone the repo
 ```bash
 git clone https://github.com/YOUR_USERNAME/basketball-detector.git
 cd basketball-detector
-```
-
-### 2. Create a virtual environment (recommended)
-```bash
 python -m venv venv
-source venv/bin/activate        # macOS/Linux
-venv\Scripts\activate           # Windows
-```
-
-### 3. Install dependencies
-```bash
+venv\Scripts\activate        # Windows
+source venv/bin/activate     # Mac/Linux
 pip install -r requirements.txt
 ```
 
-> YOLOv8 weights (`yolov8n.pt`) are downloaded automatically on first run.
+YOLOv8 weights download automatically the first time you run it.
 
 ---
 
-## 🚀 Usage
+## Running it
 
-### Detect on an image
+**On a video (recommended — generates the full report)**
 ```bash
-python src/detector.py --source path/to/image.jpg --output output/images/
+python detector.py --source game.mp4 --output output/
 ```
 
-### Detect on a video
+After it finishes you'll find these in `output/`:
+- `detected_game.mp4` — the annotated video
+- `match_stats.csv` — per-player numbers
+- `dashboard.html` — open this in Chrome/Edge
+- `heatmaps/` — one image per player, one per team
+
+**On a single image**
 ```bash
-python src/detector.py --source path/to/game.mp4 --output output/videos/result.mp4
+python detector.py --source game.jpg --output output/
 ```
 
-### Live webcam detection
+**Webcam**
 ```bash
-python src/detector.py --source webcam
+python detector.py --source webcam
 ```
 
-### All options
-```
---source         Input: image path, video path, or 'webcam'  (required)
---output         Output path or directory
---model          YOLOv8 model variant (default: yolov8n.pt)
---conf           Confidence threshold 0–1 (default: 0.4)
---device         cpu | cuda | mps (default: cpu)
---no-tracking    Disable player tracking
---no-teams       Disable team classification
---preview        Show live preview window (video mode)
---max-frames     Limit frames processed (video mode)
-```
-
-### Use a larger model for better accuracy
+**With a fine-tuned model**
 ```bash
-python src/detector.py --source game.mp4 --model yolov8m.pt --device cuda
+python detector.py --source game.mp4 --model best.pt --output output/
+```
+
+**All flags**
+```
+--source          video, image, or 'webcam'
+--output          where to save results (default: output/)
+--model           which weights to use (default: yolov8n.pt)
+--conf            detection confidence 0-1 (default: 0.4)
+--device          cpu / cuda / mps
+--no-tracking     turn off player tracking
+--no-teams        turn off team classification
+--no-analytics    skip the stats report entirely
+--preview         show a live preview window while processing
+--max-frames      stop after N frames (useful for testing)
 ```
 
 ---
 
-## 🏷️ Model Options
+## The stats it tracks
 
-| Model | Size | Speed | Accuracy |
-|---|---|---|---|
-| `yolov8n.pt` | 6 MB | ⚡ Fastest | Good |
-| `yolov8s.pt` | 22 MB | Fast | Better |
-| `yolov8m.pt` | 52 MB | Medium | Great |
-| `yolov8l.pt` | 87 MB | Slower | Excellent |
-| `yolov8x.pt` | 131 MB | Slowest | Best |
+After processing a video, `match_stats.csv` has one row per player:
 
-> For real-time use, `yolov8n` or `yolov8s` are recommended.
+| Column | What it means |
+|---|---|
+| Player ID | The tracking ID assigned to that player |
+| Team | Team A or Team B |
+| Time on Court (s) | How long they were visible in the video |
+| Distance (m) | Total metres covered |
+| Avg Speed (m/s) | Average pace across the whole match |
+| Max Speed (m/s) | Fastest moment recorded |
+| Dominant Zone | Where they spent the most time |
+| Zone: X (%) | Breakdown across all 7 court zones |
 
----
-
-## 🎽 How Team Classification Works
-
-1. For each detected player, the upper torso region is cropped (jersey area)
-2. K-Means clustering extracts the dominant jersey color in HSV space
-3. Over the first few frames, color samples are collected
-4. Players are clustered into **Team A** and **Team B** automatically
-5. Team labels and colors persist consistently across frames
-
-> No manual color configuration needed — it adapts to any teams automatically.
+The court is split into 7 zones — Left Paint, Left Wing, Left Corner, Mid Court, Right Wing, Right Corner, Right Paint. Each player gets a percentage for how much time they spent in each one.
 
 ---
 
-## 🔍 How Tracking Works
+## How team classification works
 
-A lightweight **IoU-based tracker** assigns consistent IDs:
-- Detections are matched to existing tracks using Intersection over Union
-- Tracks persist for up to 30 frames without a match before being dropped
-- New players are assigned new IDs automatically
+It looks at the upper half of each player's bounding box (where the jersey is), extracts the dominant color using K-Means clustering in HSV color space, and groups players into two clusters. The first 10-20 frames are used to build up enough samples before assignments stabilize. It adapts automatically — you don't need to tell it what colors to look for.
 
-For production-grade tracking, consider enabling [ByteTrack](https://github.com/ifzhang/ByteTrack) via `ultralytics` built-in tracking:
+---
+
+## How tracking works
+
+Uses IoU (Intersection over Union) matching between frames. Each detection in the current frame gets matched to the closest existing track based on overlap area. If a track goes unmatched for more than 30 frames it gets dropped. New detections that don't match anything start a fresh track with a new ID.
+
+It's lightweight by design. If you need more robustness (players crossing, fast cuts) you can swap in ByteTrack:
 ```python
 results = model.track(frame, persist=True, tracker="bytetrack.yaml")
 ```
 
 ---
 
-## 🧪 Running Tests
+## Model options
+
+| Model | Size | Notes |
+|---|---|---|
+| yolov8n.pt | 6 MB | fastest, good for real-time |
+| yolov8s.pt | 22 MB | better accuracy, still fast |
+| yolov8m.pt | 52 MB | solid balance |
+| yolov8l.pt | 87 MB | high accuracy |
+| yolov8x.pt | 131 MB | best accuracy, slowest |
+
+For quick testing or webcam use `yolov8n`. For match footage where accuracy matters more, `yolov8s` or `yolov8m` is worth it.
+
+---
+
+## Fine-tuning
+
+The base model is pretrained on COCO — it works fine but treats everyone as a generic "person". Fine-tuning on actual basketball footage makes it significantly better: it learns to ignore coaches and crowd, gets better at detecting the ball specifically, and handles crowded court situations much more reliably.
+
+Full guide in [FINE_TUNING.md](FINE_TUNING.md).
+
+Quick version:
+```bash
+pip install -r requirements-finetune.txt
+python finetune/download_dataset.py   # needs a free Roboflow API key
+python finetune/train.py --data data/basketball/data.yaml --model yolov8s.pt --device 0
+```
+
+If you don't have a GPU locally, `Basketball_Finetune_Colab.ipynb` runs the whole thing on Google Colab for free in about 30 minutes.
+
+---
+
+## Tests
 
 ```bash
 python -m pytest tests/
@@ -149,36 +190,30 @@ python -m pytest tests/
 
 ---
 
-## 🖥️ Requirements
+## Requirements
 
 - Python 3.9+
-- OpenCV
 - PyTorch
-- Ultralytics (YOLOv8)
+- Ultralytics
+- OpenCV
 - scikit-learn
+- Pandas
+- NumPy
 
-GPU is optional but greatly speeds up video processing.
-
----
-
-## 📸 Output Preview
-
-Annotated output includes:
-- Colored bounding boxes per team
-- Player track IDs (`#1`, `#2`, ...)
-- Ball circle overlay
-- Live stats panel (player count, team count, ball detected)
+GPU not required but makes a big difference for training and speeds up inference on longer videos.
 
 ---
 
-## 📄 License
+## What's next
 
-MIT License — free to use, modify, and distribute.
+Things I want to add:
+- Ball possession detection (which player has the ball)
+- Jersey number recognition for identifying specific players
+- PDF export of the match report
+- Live camera integration for courtside use
 
 ---
 
-## 🙌 Acknowledgements
+## License
 
-- [Ultralytics YOLOv8](https://github.com/ultralytics/ultralytics)
-- [OpenCV](https://opencv.org/)
-- COCO dataset for pretrained weights
+MIT
