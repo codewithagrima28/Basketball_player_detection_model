@@ -183,7 +183,10 @@ class BasketballDetector:
             cap.release()
             if writer:
                 writer.release()
-            cv2.destroyAllWindows()
+            try:
+              cv2.destroyAllWindows()
+            except Exception:
+              pass
 
         elapsed = time.time() - start_time
         processing_stats = {
@@ -273,7 +276,10 @@ class BasketballDetector:
                 break
 
         cap.release()
-        cv2.destroyAllWindows()
+        try:
+            cv2.destroyAllWindows()
+        except Exception:
+            pass
 
 
 def parse_args():

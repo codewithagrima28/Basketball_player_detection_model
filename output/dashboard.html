@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>🏀 Match — 128247-740907028_medium — Coach Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+          background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+  header { background: linear-gradient(135deg, #1e3a5f, #0f172a);
+            padding: 28px 40px; border-bottom: 2px solid #1e40af; }
+  header h1 { font-size: 1.8rem; color: #f8fafc; }
+  header p  { color: #94a3b8; margin-top: 4px; font-size: 0.9rem; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+  .section { margin-bottom: 40px; }
+  .section h2 { font-size: 1.2rem; color: #93c5fd; margin-bottom: 16px;
+                 border-left: 3px solid #3b82f6; padding-left: 12px; }
+  .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                    gap: 16px; margin-bottom: 40px; }
+  .card { background: #1e293b; border-radius: 12px; padding: 20px;
+           border: 1px solid #334155; }
+  .card .value { font-size: 2rem; font-weight: 700; color: #60a5fa; }
+  .card .label { font-size: 0.8rem; color: #94a3b8; margin-top: 4px; text-transform: uppercase; }
+  .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .chart-box { background: #1e293b; border-radius: 12px; padding: 20px;
+                border: 1px solid #334155; }
+  .chart-box h3 { font-size: 0.95rem; color: #cbd5e1; margin-bottom: 16px; }
+  table { width: 100%; border-collapse: collapse; background: #1e293b;
+           border-radius: 12px; overflow: hidden; border: 1px solid #334155; }
+  thead { background: #0f2240; }
+  th { padding: 12px 16px; text-align: left; font-size: 0.8rem;
+        color: #93c5fd; text-transform: uppercase; letter-spacing: 0.05em; }
+  td { padding: 12px 16px; border-top: 1px solid #1e3a5f; font-size: 0.9rem; }
+  tr:hover td { background: #162032; }
+  .team-badge { display: inline-block; padding: 2px 10px; border-radius: 99px;
+                 font-size: 0.75rem; font-weight: 600; color: white; }
+  .heatmap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+                   gap: 20px; }
+  .heatmap-card { background: #1e293b; border-radius: 12px; overflow: hidden;
+                   border: 1px solid #334155; }
+  .heatmap-card img { width: 100%; display: block; }
+  .heatmap-card p { padding: 10px 14px; font-size: 0.85rem; color: #94a3b8; }
+  @media (max-width: 768px) {
+    .charts { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>🏀 Match — 128247-740907028_medium</h1>
+  <p>Generated May 15, 2026 — 10:02 | Source: 128247-740907028_medium.mp4</p>
+</header>
+
+<div class="container">
+
+  <!-- Summary Cards -->
+  <div class="summary-cards">
+    <div class="card">
+      <div class="value">50</div>
+      <div class="label">Players Tracked</div>
+    </div>
+    <div class="card">
+      <div class="value">2</div>
+      <div class="label">Teams Detected</div>
+    </div>
+    <div class="card">
+      <div class="value">#51</div>
+      <div class="label">Most Distance (15.6m)</div>
+    </div>
+    <div class="card">
+      <div class="value">#74</div>
+      <div class="label">Fastest (62.73 m/s)</div>
+    </div>
+    <div class="card">
+      <div class="value">177m</div>
+      <div class="label">Total Distance (all players)</div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <section class="section">
+    <h2>📊 Player Performance Charts</h2>
+    <div class="charts">
+      <div class="chart-box">
+        <h3>Distance Covered per Player (m)</h3>
+        <canvas id="distChart"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>Max Speed per Player (m/s)</h3>
+        <canvas id="speedChart"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Table -->
+  <section class="section">
+    <h2>📋 Full Player Stats</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Player</th><th>Team</th><th>Time</th>
+          <th>Distance</th><th>Avg Speed</th><th>Max Speed</th><th>Dominant Zone</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+            <td><strong>#51</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>3.6s</td>
+            <td><strong>15.6m</strong></td>
+            <td>4.38 m/s</td>
+            <td>36.1 m/s</td>
+            <td>Left Corner</td>
+        </tr>
+        <tr>
+            <td><strong>#32</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>6.2s</td>
+            <td><strong>14.8m</strong></td>
+            <td>2.39 m/s</td>
+            <td>13.72 m/s</td>
+            <td>Mid Court</td>
+        </tr>
+        <tr>
+            <td><strong>#17</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>9.0s</td>
+            <td><strong>14.5m</strong></td>
+            <td>1.61 m/s</td>
+            <td>13.2 m/s</td>
+            <td>Left Corner</td>
+        </tr>
+        <tr>
+            <td><strong>#74</strong></td>
+            <td><span class="team-badge" style="background:#ef4444">Team B</span></td>
+            <td>1.0s</td>
+            <td><strong>14.0m</strong></td>
+            <td>14.51 m/s</td>
+            <td>62.73 m/s</td>
+            <td>Mid Court</td>
+        </tr>
+        <tr>
+            <td><strong>#2</strong></td>
+            <td><span class="team-badge" style="background:#ef4444">Team B</span></td>
+            <td>3.5s</td>
+            <td><strong>10.4m</strong></td>
+            <td>2.97 m/s</td>
+            <td>20.32 m/s</td>
+            <td>Right Corner</td>
+        </tr>
+        <tr>
+            <td><strong>#21</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>4.1s</td>
+            <td><strong>8.6m</strong></td>
+            <td>2.1 m/s</td>
+            <td>30.44 m/s</td>
+            <td>Right Corner</td>
+        </tr>
+        <tr>
+            <td><strong>#33</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>4.2s</td>
+            <td><strong>7.8m</strong></td>
+            <td>1.88 m/s</td>
+            <td>11.34 m/s</td>
+            <td>Right Corner</td>
+        </tr>
+        <tr>
+            <td><strong>#59</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>2.9s</td>
+            <td><strong>7.1m</strong></td>
+            <td>2.42 m/s</td>
+            <td>16.25 m/s</td>
+            <td>Right Paint</td>
+        </tr>
+        <tr>
+            <td><strong>#14</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>1.8s</td>
+            <td><strong>6.1m</strong></td>
+            <td>3.42 m/s</td>
+            <td>24.5 m/s</td>
+            <td>Right Corner</td>
+        </tr>
+        <tr>
+            <td><strong>#56</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>2.7s</td>
+            <td><strong>5.5m</strong></td>
+            <td>2.01 m/s</td>
+            <td>7.24 m/s</td>
+            <td>Mid Court</td>
+        </tr>
+        <tr>
+            <td><strong>#44</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>0.9s</td>
+            <td><strong>5.0m</strong></td>
+            <td>5.59 m/s</td>
+            <td>15.18 m/s</td>
+            <td>Mid Court</td>
+        </tr>
+        <tr>
+            <td><strong>#61</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>1.5s</td>
+            <td><strong>4.6m</strong></td>
+            <td>3.14 m/s</td>
+            <td>15.5 m/s</td>
+            <td>Right Corner</td>
+        </tr>
+        <tr>
+            <td><strong>#67</strong></td>
+            <td><span class="team-badge" style="background:#ef4444">Team B</span></td>
+            <td>0.5s</td>
+            <td><strong>4.6m</strong></td>
+            <td>8.62 m/s</td>
+            <td>30.41 m/s</td>
+            <td>Right Wing</td>
+        </tr>
+        <tr>
+            <td><strong>#95</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>0.5s</td>
+            <td><strong>4.5m</strong></td>
+            <td>9.6 m/s</td>
+            <td>58.7 m/s</td>
+            <td>Left Paint</td>
+        </tr>
+        <tr>
+            <td><strong>#92</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>3.5s</td>
+            <td><strong>3.6m</strong></td>
+            <td>1.01 m/s</td>
+            <td>7.42 m/s</td>
+            <td>Left Corner</td>
+        </tr>
+        <tr>
+            <td><strong>#102</strong></td>
+            <td><span class="team-badge" style="background:#ef4444">Team B</span></td>
+            <td>0.6s</td>
+            <td><strong>2.9m</strong></td>
+            <td>4.86 m/s</td>
+            <td>35.8 m/s</td>
+            <td>Mid Court</td>
+        </tr>
+        <tr>
+            <td><strong>#34</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>0.3s</td>
+            <td><strong>2.8m</strong></td>
+            <td>8.41 m/s</td>
+            <td>19.68 m/s</td>
+            <td>Right Corner</td>
+        </tr>
+        <tr>
+            <td><strong>#41</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>0.6s</td>
+            <td><strong>2.8m</strong></td>
+            <td>5.0 m/s</td>
+            <td>11.97 m/s</td>
+            <td>Right Corner</td>
+        </tr>
+        <tr>
+            <td><strong>#8</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>0.8s</td>
+            <td><strong>2.7m</strong></td>
+            <td>3.19 m/s</td>
+            <td>19.94 m/s</td>
+            <td>Left Corner</td>
+        </tr>
+        <tr>
+            <td><strong>#65</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>1.3s</td>
+            <td><strong>2.6m</strong></td>
+            <td>1.97 m/s</td>
+            <td>5.64 m/s</td>
+            <td>Right Corner</td>
+        </tr>
+        <tr>
+            <td><strong>#40</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>1.6s</td>
+            <td><strong>2.4m</strong></td>
+            <td>1.52 m/s</td>
+            <td>17.9 m/s</td>
+            <td>Right Corner</td>
+        </tr>
+        <tr>
+            <td><strong>#28</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>0.6s</td>
+            <td><strong>2.4m</strong></td>
+            <td>3.97 m/s</td>
+            <td>19.69 m/s</td>
+            <td>Right Corner</td>
+        </tr>
+        <tr>
+            <td><strong>#42</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>0.6s</td>
+            <td><strong>2.4m</strong></td>
+            <td>4.21 m/s</td>
+            <td>14.95 m/s</td>
+            <td>Left Corner</td>
+        </tr>
+        <tr>
+            <td><strong>#25</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>1.4s</td>
+            <td><strong>2.3m</strong></td>
+            <td>1.67 m/s</td>
+            <td>4.18 m/s</td>
+            <td>Mid Court</td>
+        </tr>
+        <tr>
+            <td><strong>#68</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>0.8s</td>
+            <td><strong>2.3m</strong></td>
+            <td>2.91 m/s</td>
+            <td>7.76 m/s</td>
+            <td>Right Corner</td>
+        </tr>
+        <tr>
+            <td><strong>#39</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>1.0s</td>
+            <td><strong>2.1m</strong></td>
+            <td>2.2 m/s</td>
+            <td>19.7 m/s</td>
+            <td>Right Corner</td>
+        </tr>
+        <tr>
+            <td><strong>#62</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>0.9s</td>
+            <td><strong>2.0m</strong></td>
+            <td>2.36 m/s</td>
+            <td>9.12 m/s</td>
+            <td>Right Paint</td>
+        </tr>
+        <tr>
+            <td><strong>#88</strong></td>
+            <td><span class="team-badge" style="background:#ef4444">Team B</span></td>
+            <td>0.2s</td>
+            <td><strong>1.8m</strong></td>
+            <td>10.74 m/s</td>
+            <td>26.81 m/s</td>
+            <td>Mid Court</td>
+        </tr>
+        <tr>
+            <td><strong>#66</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>0.9s</td>
+            <td><strong>1.6m</strong></td>
+            <td>1.77 m/s</td>
+            <td>5.54 m/s</td>
+            <td>Right Corner</td>
+        </tr>
+        <tr>
+            <td><strong>#69</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>0.5s</td>
+            <td><strong>1.6m</strong></td>
+            <td>3.28 m/s</td>
+            <td>13.06 m/s</td>
+            <td>Left Corner</td>
+        </tr>
+        <tr>
+            <td><strong>#93</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>0.3s</td>
+            <td><strong>1.6m</strong></td>
+            <td>5.49 m/s</td>
+            <td>14.91 m/s</td>
+            <td>Mid Court</td>
+        </tr>
+        <tr>
+            <td><strong>#47</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>0.4s</td>
+            <td><strong>1.6m</strong></td>
+            <td>4.44 m/s</td>
+            <td>7.16 m/s</td>
+            <td>Left Corner</td>
+        </tr>
+        <tr>
+            <td><strong>#98</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>1.8s</td>
+            <td><strong>1.5m</strong></td>
+            <td>0.8 m/s</td>
+            <td>1.82 m/s</td>
+            <td>Left Corner</td>
+        </tr>
+        <tr>
+            <td><strong>#9</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>0.2s</td>
+            <td><strong>1.4m</strong></td>
+            <td>6.91 m/s</td>
+            <td>14.98 m/s</td>
+            <td>Right Paint</td>
+        </tr>
+        <tr>
+            <td><strong>#75</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>0.2s</td>
+            <td><strong>1.2m</strong></td>
+            <td>7.48 m/s</td>
+            <td>10.62 m/s</td>
+            <td>Left Corner</td>
+        </tr>
+        <tr>
+            <td><strong>#3</strong></td>
+            <td><span class="team-badge" style="background:#ef4444">Team B</span></td>
+            <td>1.2s</td>
+            <td><strong>1.1m</strong></td>
+            <td>0.9 m/s</td>
+            <td>2.39 m/s</td>
+            <td>Right Corner</td>
+        </tr>
+        <tr>
+            <td><strong>#63</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>0.5s</td>
+            <td><strong>1.0m</strong></td>
+            <td>1.86 m/s</td>
+            <td>3.0 m/s</td>
+            <td>Right Corner</td>
+        </tr>
+        <tr>
+            <td><strong>#35</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>1.8s</td>
+            <td><strong>1.0m</strong></td>
+            <td>0.56 m/s</td>
+            <td>2.49 m/s</td>
+            <td>Left Paint</td>
+        </tr>
+        <tr>
+            <td><strong>#1</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>0.5s</td>
+            <td><strong>0.9m</strong></td>
+            <td>1.74 m/s</td>
+            <td>10.14 m/s</td>
+            <td>Right Paint</td>
+        </tr>
+        <tr>
+            <td><strong>#54</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>0.2s</td>
+            <td><strong>0.8m</strong></td>
+            <td>4.77 m/s</td>
+            <td>6.6 m/s</td>
+            <td>Left Paint</td>
+        </tr>
+        <tr>
+            <td><strong>#50</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>0.3s</td>
+            <td><strong>0.8m</strong></td>
+            <td>2.32 m/s</td>
+            <td>5.38 m/s</td>
+            <td>Left Corner</td>
+        </tr>
+        <tr>
+            <td><strong>#37</strong></td>
+            <td><span class="team-badge" style="background:#ef4444">Team B</span></td>
+            <td>0.3s</td>
+            <td><strong>0.7m</strong></td>
+            <td>2.8 m/s</td>
+            <td>5.37 m/s</td>
+            <td>Left Paint</td>
+        </tr>
+        <tr>
+            <td><strong>#106</strong></td>
+            <td><span class="team-badge" style="background:#ef4444">Team B</span></td>
+            <td>0.2s</td>
+            <td><strong>0.6m</strong></td>
+            <td>2.36 m/s</td>
+            <td>5.39 m/s</td>
+            <td>Mid Court</td>
+        </tr>
+        <tr>
+            <td><strong>#38</strong></td>
+            <td><span class="team-badge" style="background:#ef4444">Team B</span></td>
+            <td>0.2s</td>
+            <td><strong>0.3m</strong></td>
+            <td>1.28 m/s</td>
+            <td>4.28 m/s</td>
+            <td>Right Wing</td>
+        </tr>
+        <tr>
+            <td><strong>#90</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>0.2s</td>
+            <td><strong>0.3m</strong></td>
+            <td>1.28 m/s</td>
+            <td>2.3 m/s</td>
+            <td>Left Corner</td>
+        </tr>
+        <tr>
+            <td><strong>#97</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>0.2s</td>
+            <td><strong>0.3m</strong></td>
+            <td>1.63 m/s</td>
+            <td>5.86 m/s</td>
+            <td>Mid Court</td>
+        </tr>
+        <tr>
+            <td><strong>#19</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>0.2s</td>
+            <td><strong>0.2m</strong></td>
+            <td>1.42 m/s</td>
+            <td>4.36 m/s</td>
+            <td>Right Paint</td>
+        </tr>
+        <tr>
+            <td><strong>#36</strong></td>
+            <td><span class="team-badge" style="background:#ef4444">Team B</span></td>
+            <td>0.2s</td>
+            <td><strong>0.1m</strong></td>
+            <td>0.67 m/s</td>
+            <td>1.82 m/s</td>
+            <td>Left Paint</td>
+        </tr>
+        <tr>
+            <td><strong>#5</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>0.2s</td>
+            <td><strong>0.1m</strong></td>
+            <td>0.42 m/s</td>
+            <td>1.79 m/s</td>
+            <td>Right Paint</td>
+        </tr>
+        <tr>
+            <td><strong>#24</strong></td>
+            <td><span class="team-badge" style="background:#3b82f6">Team A</span></td>
+            <td>0.3s</td>
+            <td><strong>0.1m</strong></td>
+            <td>0.48 m/s</td>
+            <td>1.19 m/s</td>
+            <td>Right Corner</td>
+        </tr></tbody>
+    </table>
+  </section>
+
+  
+            <section class="section">
+                <h2>🗺️ Court Heatmaps</h2>
+                <div class="heatmap-grid">
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_100_heatmap.png" alt="Player 100 Heatmap" loading="lazy"/>
+                    <p>Player 100 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_101_heatmap.png" alt="Player 101 Heatmap" loading="lazy"/>
+                    <p>Player 101 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_102_heatmap.png" alt="Player 102 Heatmap" loading="lazy"/>
+                    <p>Player 102 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_103_heatmap.png" alt="Player 103 Heatmap" loading="lazy"/>
+                    <p>Player 103 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_104_heatmap.png" alt="Player 104 Heatmap" loading="lazy"/>
+                    <p>Player 104 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_105_heatmap.png" alt="Player 105 Heatmap" loading="lazy"/>
+                    <p>Player 105 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_106_heatmap.png" alt="Player 106 Heatmap" loading="lazy"/>
+                    <p>Player 106 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_10_heatmap.png" alt="Player 10 Heatmap" loading="lazy"/>
+                    <p>Player 10 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_11_heatmap.png" alt="Player 11 Heatmap" loading="lazy"/>
+                    <p>Player 11 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_12_heatmap.png" alt="Player 12 Heatmap" loading="lazy"/>
+                    <p>Player 12 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_13_heatmap.png" alt="Player 13 Heatmap" loading="lazy"/>
+                    <p>Player 13 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_14_heatmap.png" alt="Player 14 Heatmap" loading="lazy"/>
+                    <p>Player 14 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_15_heatmap.png" alt="Player 15 Heatmap" loading="lazy"/>
+                    <p>Player 15 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_16_heatmap.png" alt="Player 16 Heatmap" loading="lazy"/>
+                    <p>Player 16 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_17_heatmap.png" alt="Player 17 Heatmap" loading="lazy"/>
+                    <p>Player 17 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_18_heatmap.png" alt="Player 18 Heatmap" loading="lazy"/>
+                    <p>Player 18 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_19_heatmap.png" alt="Player 19 Heatmap" loading="lazy"/>
+                    <p>Player 19 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_1_heatmap.png" alt="Player 1 Heatmap" loading="lazy"/>
+                    <p>Player 1 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_20_heatmap.png" alt="Player 20 Heatmap" loading="lazy"/>
+                    <p>Player 20 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_21_heatmap.png" alt="Player 21 Heatmap" loading="lazy"/>
+                    <p>Player 21 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_22_heatmap.png" alt="Player 22 Heatmap" loading="lazy"/>
+                    <p>Player 22 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_23_heatmap.png" alt="Player 23 Heatmap" loading="lazy"/>
+                    <p>Player 23 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_24_heatmap.png" alt="Player 24 Heatmap" loading="lazy"/>
+                    <p>Player 24 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_25_heatmap.png" alt="Player 25 Heatmap" loading="lazy"/>
+                    <p>Player 25 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_26_heatmap.png" alt="Player 26 Heatmap" loading="lazy"/>
+                    <p>Player 26 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_27_heatmap.png" alt="Player 27 Heatmap" loading="lazy"/>
+                    <p>Player 27 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_28_heatmap.png" alt="Player 28 Heatmap" loading="lazy"/>
+                    <p>Player 28 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_29_heatmap.png" alt="Player 29 Heatmap" loading="lazy"/>
+                    <p>Player 29 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_2_heatmap.png" alt="Player 2 Heatmap" loading="lazy"/>
+                    <p>Player 2 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_30_heatmap.png" alt="Player 30 Heatmap" loading="lazy"/>
+                    <p>Player 30 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_31_heatmap.png" alt="Player 31 Heatmap" loading="lazy"/>
+                    <p>Player 31 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_32_heatmap.png" alt="Player 32 Heatmap" loading="lazy"/>
+                    <p>Player 32 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_33_heatmap.png" alt="Player 33 Heatmap" loading="lazy"/>
+                    <p>Player 33 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_34_heatmap.png" alt="Player 34 Heatmap" loading="lazy"/>
+                    <p>Player 34 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_35_heatmap.png" alt="Player 35 Heatmap" loading="lazy"/>
+                    <p>Player 35 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_36_heatmap.png" alt="Player 36 Heatmap" loading="lazy"/>
+                    <p>Player 36 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_37_heatmap.png" alt="Player 37 Heatmap" loading="lazy"/>
+                    <p>Player 37 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_38_heatmap.png" alt="Player 38 Heatmap" loading="lazy"/>
+                    <p>Player 38 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_39_heatmap.png" alt="Player 39 Heatmap" loading="lazy"/>
+                    <p>Player 39 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_3_heatmap.png" alt="Player 3 Heatmap" loading="lazy"/>
+                    <p>Player 3 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_40_heatmap.png" alt="Player 40 Heatmap" loading="lazy"/>
+                    <p>Player 40 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_41_heatmap.png" alt="Player 41 Heatmap" loading="lazy"/>
+                    <p>Player 41 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_42_heatmap.png" alt="Player 42 Heatmap" loading="lazy"/>
+                    <p>Player 42 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_43_heatmap.png" alt="Player 43 Heatmap" loading="lazy"/>
+                    <p>Player 43 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_44_heatmap.png" alt="Player 44 Heatmap" loading="lazy"/>
+                    <p>Player 44 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_45_heatmap.png" alt="Player 45 Heatmap" loading="lazy"/>
+                    <p>Player 45 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_46_heatmap.png" alt="Player 46 Heatmap" loading="lazy"/>
+                    <p>Player 46 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_47_heatmap.png" alt="Player 47 Heatmap" loading="lazy"/>
+                    <p>Player 47 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_48_heatmap.png" alt="Player 48 Heatmap" loading="lazy"/>
+                    <p>Player 48 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_49_heatmap.png" alt="Player 49 Heatmap" loading="lazy"/>
+                    <p>Player 49 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_4_heatmap.png" alt="Player 4 Heatmap" loading="lazy"/>
+                    <p>Player 4 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_50_heatmap.png" alt="Player 50 Heatmap" loading="lazy"/>
+                    <p>Player 50 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_51_heatmap.png" alt="Player 51 Heatmap" loading="lazy"/>
+                    <p>Player 51 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_52_heatmap.png" alt="Player 52 Heatmap" loading="lazy"/>
+                    <p>Player 52 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_53_heatmap.png" alt="Player 53 Heatmap" loading="lazy"/>
+                    <p>Player 53 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_54_heatmap.png" alt="Player 54 Heatmap" loading="lazy"/>
+                    <p>Player 54 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_55_heatmap.png" alt="Player 55 Heatmap" loading="lazy"/>
+                    <p>Player 55 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_56_heatmap.png" alt="Player 56 Heatmap" loading="lazy"/>
+                    <p>Player 56 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_57_heatmap.png" alt="Player 57 Heatmap" loading="lazy"/>
+                    <p>Player 57 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_58_heatmap.png" alt="Player 58 Heatmap" loading="lazy"/>
+                    <p>Player 58 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_59_heatmap.png" alt="Player 59 Heatmap" loading="lazy"/>
+                    <p>Player 59 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_5_heatmap.png" alt="Player 5 Heatmap" loading="lazy"/>
+                    <p>Player 5 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_60_heatmap.png" alt="Player 60 Heatmap" loading="lazy"/>
+                    <p>Player 60 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_61_heatmap.png" alt="Player 61 Heatmap" loading="lazy"/>
+                    <p>Player 61 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_62_heatmap.png" alt="Player 62 Heatmap" loading="lazy"/>
+                    <p>Player 62 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_63_heatmap.png" alt="Player 63 Heatmap" loading="lazy"/>
+                    <p>Player 63 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_64_heatmap.png" alt="Player 64 Heatmap" loading="lazy"/>
+                    <p>Player 64 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_65_heatmap.png" alt="Player 65 Heatmap" loading="lazy"/>
+                    <p>Player 65 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_66_heatmap.png" alt="Player 66 Heatmap" loading="lazy"/>
+                    <p>Player 66 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_67_heatmap.png" alt="Player 67 Heatmap" loading="lazy"/>
+                    <p>Player 67 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_68_heatmap.png" alt="Player 68 Heatmap" loading="lazy"/>
+                    <p>Player 68 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_69_heatmap.png" alt="Player 69 Heatmap" loading="lazy"/>
+                    <p>Player 69 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_6_heatmap.png" alt="Player 6 Heatmap" loading="lazy"/>
+                    <p>Player 6 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_70_heatmap.png" alt="Player 70 Heatmap" loading="lazy"/>
+                    <p>Player 70 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_71_heatmap.png" alt="Player 71 Heatmap" loading="lazy"/>
+                    <p>Player 71 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_72_heatmap.png" alt="Player 72 Heatmap" loading="lazy"/>
+                    <p>Player 72 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_73_heatmap.png" alt="Player 73 Heatmap" loading="lazy"/>
+                    <p>Player 73 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_74_heatmap.png" alt="Player 74 Heatmap" loading="lazy"/>
+                    <p>Player 74 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_75_heatmap.png" alt="Player 75 Heatmap" loading="lazy"/>
+                    <p>Player 75 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_76_heatmap.png" alt="Player 76 Heatmap" loading="lazy"/>
+                    <p>Player 76 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_77_heatmap.png" alt="Player 77 Heatmap" loading="lazy"/>
+                    <p>Player 77 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_78_heatmap.png" alt="Player 78 Heatmap" loading="lazy"/>
+                    <p>Player 78 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_79_heatmap.png" alt="Player 79 Heatmap" loading="lazy"/>
+                    <p>Player 79 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_7_heatmap.png" alt="Player 7 Heatmap" loading="lazy"/>
+                    <p>Player 7 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_80_heatmap.png" alt="Player 80 Heatmap" loading="lazy"/>
+                    <p>Player 80 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_81_heatmap.png" alt="Player 81 Heatmap" loading="lazy"/>
+                    <p>Player 81 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_82_heatmap.png" alt="Player 82 Heatmap" loading="lazy"/>
+                    <p>Player 82 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_83_heatmap.png" alt="Player 83 Heatmap" loading="lazy"/>
+                    <p>Player 83 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_84_heatmap.png" alt="Player 84 Heatmap" loading="lazy"/>
+                    <p>Player 84 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_85_heatmap.png" alt="Player 85 Heatmap" loading="lazy"/>
+                    <p>Player 85 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_86_heatmap.png" alt="Player 86 Heatmap" loading="lazy"/>
+                    <p>Player 86 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_87_heatmap.png" alt="Player 87 Heatmap" loading="lazy"/>
+                    <p>Player 87 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_88_heatmap.png" alt="Player 88 Heatmap" loading="lazy"/>
+                    <p>Player 88 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_89_heatmap.png" alt="Player 89 Heatmap" loading="lazy"/>
+                    <p>Player 89 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_8_heatmap.png" alt="Player 8 Heatmap" loading="lazy"/>
+                    <p>Player 8 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_90_heatmap.png" alt="Player 90 Heatmap" loading="lazy"/>
+                    <p>Player 90 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_91_heatmap.png" alt="Player 91 Heatmap" loading="lazy"/>
+                    <p>Player 91 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_92_heatmap.png" alt="Player 92 Heatmap" loading="lazy"/>
+                    <p>Player 92 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_93_heatmap.png" alt="Player 93 Heatmap" loading="lazy"/>
+                    <p>Player 93 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_94_heatmap.png" alt="Player 94 Heatmap" loading="lazy"/>
+                    <p>Player 94 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_95_heatmap.png" alt="Player 95 Heatmap" loading="lazy"/>
+                    <p>Player 95 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_96_heatmap.png" alt="Player 96 Heatmap" loading="lazy"/>
+                    <p>Player 96 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_97_heatmap.png" alt="Player 97 Heatmap" loading="lazy"/>
+                    <p>Player 97 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_98_heatmap.png" alt="Player 98 Heatmap" loading="lazy"/>
+                    <p>Player 98 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_99_heatmap.png" alt="Player 99 Heatmap" loading="lazy"/>
+                    <p>Player 99 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/player_9_heatmap.png" alt="Player 9 Heatmap" loading="lazy"/>
+                    <p>Player 9 Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/team_a_heatmap.png" alt="Team A Heatmap" loading="lazy"/>
+                    <p>Team A Heatmap</p>
+                </div>
+                <div class="heatmap-card">
+                    <img src="heatmaps/team_b_heatmap.png" alt="Team B Heatmap" loading="lazy"/>
+                    <p>Team B Heatmap</p>
+                </div></div>
+            </section>
+
+</div>
+
+<script>
+const labels  = ["#51", "#32", "#17", "#74", "#2", "#21", "#33", "#59", "#14", "#56", "#44", "#61", "#67", "#95", "#92", "#102", "#34", "#41", "#8", "#65", "#40", "#28", "#42", "#25", "#68", "#39", "#62", "#88", "#66", "#69", "#93", "#47", "#98", "#9", "#75", "#3", "#63", "#35", "#1", "#54", "#50", "#37", "#106", "#38", "#90", "#97", "#19", "#36", "#5", "#24"];
+const dists   = [15.6, 14.8, 14.5, 14.0, 10.4, 8.6, 7.8, 7.1, 6.1, 5.5, 5.0, 4.6, 4.6, 4.5, 3.6, 2.9, 2.8, 2.8, 2.7, 2.6, 2.4, 2.4, 2.4, 2.3, 2.3, 2.1, 2.0, 1.8, 1.6, 1.6, 1.6, 1.6, 1.5, 1.4, 1.2, 1.1, 1.0, 1.0, 0.9, 0.8, 0.8, 0.7, 0.6, 0.3, 0.3, 0.3, 0.2, 0.1, 0.1, 0.1];
+const speeds  = [36.1, 13.72, 13.2, 62.73, 20.32, 30.44, 11.34, 16.25, 24.5, 7.24, 15.18, 15.5, 30.41, 58.7, 7.42, 35.8, 19.68, 11.97, 19.94, 5.64, 17.9, 19.69, 14.95, 4.18, 7.76, 19.7, 9.12, 26.81, 5.54, 13.06, 14.91, 7.16, 1.82, 14.98, 10.62, 2.39, 3.0, 2.49, 10.14, 6.6, 5.38, 5.37, 5.39, 4.28, 2.3, 5.86, 4.36, 1.82, 1.79, 1.19];
+const colors  = ["#3b82f6", "#3b82f6", "#3b82f6", "#ef4444", "#ef4444", "#3b82f6", "#3b82f6", "#3b82f6", "#3b82f6", "#3b82f6", "#3b82f6", "#3b82f6", "#ef4444", "#3b82f6", "#3b82f6", "#ef4444", "#3b82f6", "#3b82f6", "#3b82f6", "#3b82f6", "#3b82f6", "#3b82f6", "#3b82f6", "#3b82f6", "#3b82f6", "#3b82f6", "#3b82f6", "#ef4444", "#3b82f6", "#3b82f6", "#3b82f6", "#3b82f6", "#3b82f6", "#3b82f6", "#3b82f6", "#ef4444", "#3b82f6", "#3b82f6", "#3b82f6", "#3b82f6", "#3b82f6", "#ef4444", "#ef4444", "#ef4444", "#3b82f6", "#3b82f6", "#3b82f6", "#ef4444", "#3b82f6", "#3b82f6"];
+
+new Chart(document.getElementById('distChart'), {
+  type: 'bar',
+  data: { labels, datasets: [{ label: 'Distance (m)', data: dists,
+    backgroundColor: colors, borderRadius: 6 }] },
+  options: { responsive: true, plugins: { legend: { display: false } },
+    scales: { x: { ticks: { color: '#94a3b8' }, grid: { color: '#1e3a5f' } },
+               y: { ticks: { color: '#94a3b8' }, grid: { color: '#1e3a5f' } } } }
+});
+
+new Chart(document.getElementById('speedChart'), {
+  type: 'bar',
+  data: { labels, datasets: [{ label: 'Max Speed (m/s)', data: speeds,
+    backgroundColor: colors, borderRadius: 6 }] },
+  options: { responsive: true, plugins: { legend: { display: false } },
+    scales: { x: { ticks: { color: '#94a3b8' }, grid: { color: '#1e3a5f' } },
+               y: { ticks: { color: '#94a3b8' }, grid: { color: '#1e3a5f' } } } }
+});
+</script>
+</body>
+</html>

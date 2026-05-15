@@ -12,12 +12,39 @@ The goal was to take something that coaches usually spend 3-4 hours doing manual
 - Draws bounding boxes with team colors and player IDs that stay consistent frame to frame
 - Automatically figures out which player belongs to which team by looking at jersey colors — no manual setup needed
 - Tracks how far each player ran and how fast they were going
-- Maps out which areas of the court each player used most
+- Maps out which areas of the court each player used most (Left Paint, Right Paint, Mid Court etc.)
 - Generates a heatmap per player and per team
 - Puts everything into a `dashboard.html` you can open in your browser — charts, stats table, heatmaps, all in one place
-- Exports a CSV with the full per-player stats table (built with Pandas)
+- Exports a CSV with the full per-player stats table built with Pandas
 
 Works on images, video files, and live webcam.
+
+---
+
+## What the output looks like
+
+After running on a match video, you get:
+
+```
+output/
+├── detected_game.mp4       ← annotated video with boxes, IDs, team colors
+├── match_stats.csv         ← per-player distance, speed, zone breakdown
+├── dashboard.html          ← open this in your browser
+└── heatmaps/
+    ├── player_1_heatmap.png
+    ├── player_2_heatmap.png
+    ├── team_a_heatmap.png
+    └── team_b_heatmap.png
+```
+
+The stats table in the terminal looks like this:
+
+```
+Player ID  Team    Time(s)  Distance(m)  Avg Speed  Max Speed  Dominant Zone
+#2         Team A  6.1      3.28         1.77       5.54       Right Corner
+#14        Team A  5.8      4.44         2.32       7.16       Left Corner
+#9         Team A  1.4      6.91         4.98       14.98      Right Paint
+```
 
 ---
 
@@ -43,15 +70,12 @@ Basketball_player_Detection/
 ├── tests/
 │   └── test_tracker.py
 │
-├── output/              # everything gets saved here
-│   ├── detected_game.mp4
-│   ├── match_stats.csv
-│   ├── dashboard.html
-│   └── heatmaps/
+├── output/              # everything gets saved here after running
 │
+├── Basketball_Finetune_Colab.ipynb  # Google Colab notebook for GPU training
 ├── requirements.txt
-├── FINE_TUNING.md
-└── Basketball_Finetune_Colab.ipynb
+├── requirements-finetune.txt
+└── FINE_TUNING.md
 ```
 
 ---
@@ -73,16 +97,10 @@ YOLOv8 weights download automatically the first time you run it.
 
 ## Running it
 
-**On a video (recommended — generates the full report)**
+**On a video — runs full pipeline and generates the report**
 ```bash
 python detector.py --source game.mp4 --output output/
 ```
-
-After it finishes you'll find these in `output/`:
-- `detected_game.mp4` — the annotated video
-- `match_stats.csv` — per-player numbers
-- `dashboard.html` — open this in Chrome/Edge
-- `heatmaps/` — one image per player, one per team
 
 **On a single image**
 ```bash
@@ -94,9 +112,18 @@ python detector.py --source game.jpg --output output/
 python detector.py --source webcam
 ```
 
-**With a fine-tuned model**
+**Quick test without analytics (faster)**
 ```bash
-python detector.py --source game.mp4 --model best.pt --output output/
+python detector.py --source game.mp4 --output output/ --no-analytics
+```
+
+**Open the dashboard after processing**
+```bash
+# Windows
+start output\dashboard.html
+
+# Mac/Linux
+open output/dashboard.html
 ```
 
 **All flags**
@@ -108,10 +135,13 @@ python detector.py --source game.mp4 --model best.pt --output output/
 --device          cpu / cuda / mps
 --no-tracking     turn off player tracking
 --no-teams        turn off team classification
---no-analytics    skip the stats report entirely
+--no-analytics    skip the stats, heatmaps and dashboard
 --preview         show a live preview window while processing
---max-frames      stop after N frames (useful for testing)
+--max-frames      stop after N frames — useful for quick tests
 ```
+
+> **Note:** Tested on Google Colab (T4 GPU) and locally on CPU. For local CPU testing,
+> use `--max-frames 100` to process a short clip quickly.
 
 ---
 
@@ -121,33 +151,28 @@ After processing a video, `match_stats.csv` has one row per player:
 
 | Column | What it means |
 |---|---|
-| Player ID | The tracking ID assigned to that player |
+| Player ID | The tracking ID assigned to that player (#1, #2 ...) |
 | Team | Team A or Team B |
 | Time on Court (s) | How long they were visible in the video |
 | Distance (m) | Total metres covered |
-| Avg Speed (m/s) | Average pace across the whole match |
+| Avg Speed (m/s) | Average pace across the match |
 | Max Speed (m/s) | Fastest moment recorded |
 | Dominant Zone | Where they spent the most time |
 | Zone: X (%) | Breakdown across all 7 court zones |
 
-The court is split into 7 zones — Left Paint, Left Wing, Left Corner, Mid Court, Right Wing, Right Corner, Right Paint. Each player gets a percentage for how much time they spent in each one.
+The court is split into 7 zones — Left Paint, Left Wing, Left Corner, Mid Court, Right Wing, Right Corner, Right Paint.
 
 ---
 
 ## How team classification works
 
-It looks at the upper half of each player's bounding box (where the jersey is), extracts the dominant color using K-Means clustering in HSV color space, and groups players into two clusters. The first 10-20 frames are used to build up enough samples before assignments stabilize. It adapts automatically — you don't need to tell it what colors to look for.
+It looks at the upper half of each player's bounding box (where the jersey is), extracts the dominant color using K-Means clustering in HSV color space, and groups players into two clusters. The first few frames are used to build up enough samples before assignments stabilize. No manual color setup needed — it adapts automatically to any two teams.
 
 ---
 
 ## How tracking works
 
-Uses IoU (Intersection over Union) matching between frames. Each detection in the current frame gets matched to the closest existing track based on overlap area. If a track goes unmatched for more than 30 frames it gets dropped. New detections that don't match anything start a fresh track with a new ID.
-
-It's lightweight by design. If you need more robustness (players crossing, fast cuts) you can swap in ByteTrack:
-```python
-results = model.track(frame, persist=True, tracker="bytetrack.yaml")
-```
+Uses IoU (Intersection over Union) matching between frames. Each detection in the current frame gets matched to the closest existing track based on how much the boxes overlap. Tracks survive up to 30 frames without a match before being dropped. New detections that don't match anything start a fresh track with a new ID.
 
 ---
 
@@ -155,19 +180,19 @@ results = model.track(frame, persist=True, tracker="bytetrack.yaml")
 
 | Model | Size | Notes |
 |---|---|---|
-| yolov8n.pt | 6 MB | fastest, good for real-time |
+| yolov8n.pt | 6 MB | fastest, good for real-time and CPU |
 | yolov8s.pt | 22 MB | better accuracy, still fast |
 | yolov8m.pt | 52 MB | solid balance |
 | yolov8l.pt | 87 MB | high accuracy |
 | yolov8x.pt | 131 MB | best accuracy, slowest |
 
-For quick testing or webcam use `yolov8n`. For match footage where accuracy matters more, `yolov8s` or `yolov8m` is worth it.
+The base model is pretrained on COCO so confidence scores on basketball footage will be in the 40-60% range. Fine-tuning pushes this up to 75-90%.
 
 ---
 
 ## Fine-tuning
 
-The base model is pretrained on COCO — it works fine but treats everyone as a generic "person". Fine-tuning on actual basketball footage makes it significantly better: it learns to ignore coaches and crowd, gets better at detecting the ball specifically, and handles crowded court situations much more reliably.
+Fine-tuning on actual basketball footage makes the model significantly better — it learns to ignore coaches and crowd, gets better at detecting the basketball specifically, and handles crowded court situations more reliably.
 
 Full guide in [FINE_TUNING.md](FINE_TUNING.md).
 
@@ -182,10 +207,18 @@ If you don't have a GPU locally, `Basketball_Finetune_Colab.ipynb` runs the whol
 
 ---
 
+## Known issues
+
+- `cv2.destroyAllWindows()` throws an error on some Windows setups after processing finishes — this is a harmless OpenCV bug, everything is already saved before it happens
+- Confidence scores will be low (40-50%) with the base model on basketball footage — this is expected and improves significantly after fine-tuning
+- Team classification works best when the two teams wear clearly different jersey colors
+
+---
+
 ## Tests
 
 ```bash
-python -m pytest tests/
+python -m pytest test_tracker.py -v
 ```
 
 ---
@@ -194,7 +227,7 @@ python -m pytest tests/
 
 - Python 3.9+
 - PyTorch
-- Ultralytics
+- Ultralytics (YOLOv8)
 - OpenCV
 - scikit-learn
 - Pandas
@@ -207,8 +240,8 @@ GPU not required but makes a big difference for training and speeds up inference
 ## What's next
 
 Things I want to add:
-- Ball possession detection (which player has the ball)
-- Jersey number recognition for identifying specific players
+- Ball possession detection (which player has the ball at any given moment)
+- Jersey number recognition for identifying specific players by name
 - PDF export of the match report
 - Live camera integration for courtside use
 
